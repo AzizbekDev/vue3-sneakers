@@ -5,7 +5,7 @@
       <p>Мужские Кроссовки Nike Air Max 270</p>
       <div class="flex justify-between">
         <b>12 999 руб.</b>
-        <img class="opacity-50 hover:opacity-100" src="/close.svg" alt="Close" />
+        <img class="opacity-50 transition hover:opacity-100" src="/close.svg" alt="Close" />
       </div>
     </div>
   </div>
