@@ -41,6 +41,11 @@ const fetchFavorites = async () => {
   }
 }
 
+const addToFavorite = async (item) => {
+  item.isFavorite = true
+  console.log(item)
+}
+
 const fetchItems = async () => {
   try {
     const params = {
