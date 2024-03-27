@@ -21,7 +21,7 @@ const addToFavorite = inject('addToFavorite')
       :imageUrl="item.imageUrl"
       :price="item.price"
       :onClickAdd="onClickAdd"
-      :onClickFavorite="addToFavorite(item)"
+      :onClickFavorite="() => addToFavorite(item)"
       :isFavorite="item.isFavorite"
     />
   </div>
