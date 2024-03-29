@@ -34,14 +34,21 @@ const onChangeSearchInput = (event) => {
 }
 
 const addToCart = (item) => {
-  if(!item.isAdded){
     item.isAdded = true
     cart.value.push(item)
-  }else{
-    cart.value.splice(cart.value.indexOf(item), 1)
+}
+
+const removeFromCart = (item) => {
     item.isAdded = false
+    cart.value.splice(cart.value.indexOf(item), 1)
+}
+
+const onClickAddPlus = (item) => {
+  if(!item.isAdded){
+    addToCart(item)
+  }else{
+    removeFromCart(item)
   }
-  console.log(cart.value)
 }
 
 const addToFavorite = async (item) => {
@@ -118,7 +125,9 @@ watch(filters, fetchItems)
 provide('cart', {
   cart,
   closeDrawer,
-  openDrawer
+  openDrawer,
+  addToCart,
+  removeFromCart
 })
 </script>
 <template>
@@ -148,7 +157,7 @@ provide('cart', {
           </div>
         </div>
       </div>
-      <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="addToCart" />
+      <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="onClickAddPlus" />
     </div>
   </div>
 </template>
