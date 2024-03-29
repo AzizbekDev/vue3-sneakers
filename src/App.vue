@@ -1,12 +1,22 @@
 <script setup>
-import { onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, reactive, ref, provide, watch } from 'vue'
 import axios from 'axios'
 
 import Header from './components/Header.vue'
 import CardList from './components/CardList.vue'
-// import Drawer from './components/Drawer.vue'
+import Drawer from './components/Drawer.vue'
 
 const items = ref([])
+
+const drawerOpen = ref(false)
+
+const closeDrawer = () => {
+  drawerOpen.value = false
+}
+
+const openDrawer = () => {
+  drawerOpen.value = true
+}
 
 const filters = reactive({
   sortBy: 'name',
@@ -91,11 +101,16 @@ onMounted(async () => {
 })
 
 watch(filters, fetchItems)
+
+provide('cardActions', {
+  closeDrawer,
+  openDrawer
+})
 </script>
 <template>
-  <!-- <Drawer /> -->
+  <Drawer v-if="drawerOpen" />
   <div class="bg-white w-4/5 m-auto mt-14 rounded-xl shadow-xl">
-    <Header />
+    <Header @open-drawer="openDrawer" />
     <div class="p-10">
       <div class="flex justify-between items-center mb-8">
         <h2 class="text-3xl font-bold">Все кроссовки</h2>
@@ -119,7 +134,7 @@ watch(filters, fetchItems)
           </div>
         </div>
       </div>
-      <CardList :items="items" @addToFavorite="addToFavorite" />
+      <CardList :items="items" @add-to-favorite="addToFavorite" />
     </div>
   </div>
 </template>
