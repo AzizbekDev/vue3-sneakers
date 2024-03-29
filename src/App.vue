@@ -22,13 +22,27 @@ const onChangeSearchInput = (event) => {
 }
 
 const addToFavorite = async (item) => {
-  item.isFavorite = !item.isFavorite
-  console.log(item)
+  try {
+    if(!item.isFavorite){
+      const obj = {
+        parentId: item.id
+      } 
+      item.isFavorite = true
+      const { data } = await axios.post('https://6e7baa9f3a425a05.mokky.dev/favorites', obj)
+      item.favoridId = data.id
+    } else {
+      item.isFavorite = false
+      await axios.delete(`https://6e7baa9f3a425a05.mokky.dev/favorites/${item.favoridId}`)
+      item.favoriteId = null
+    }
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 const fetchFavorites = async () => {
   try {
-    const { data: favorites } = await axios.get('https://604781a0efa572c1.mokky.dev/favorites')
+    const { data: favorites } = await axios.get('https://6e7baa9f3a425a05.mokky.dev/favorites')
 
     items.value = items.value.map((item) => {
       const favorite = favorites.find((favorite) => favorite.parentId === item.id)
@@ -56,13 +70,14 @@ const fetchItems = async () => {
       params.title = `*${filters.searchQuery}*`
     }
 
-    const { data } = await axios.get('https://604781a0efa572c1.mokky.dev/items', {
+    const { data } = await axios.get('https://6e7baa9f3a425a05.mokky.dev/items', {
       params
     })
 
     items.value = data.map((obj) => ({
       ...obj,
       isFavorite: false,
+      favoriteId: null,
       isAdded: false
     }))
   } catch (err) {
@@ -85,7 +100,7 @@ watch(filters, fetchItems)
       <div class="flex justify-between items-center mb-8">
         <h2 class="text-3xl font-bold">Все кроссовки</h2>
         <div class="flex gap-4">
-          <select
+          <select id="selectFilter"
             @change="onChangeSelect"
             class="border rounded-md py-2 px-3 outline-none focus:border-gray-400"
           >
@@ -95,7 +110,7 @@ watch(filters, fetchItems)
           </select>
           <div class="relative">
             <img class="absolute left-4 top-3" src="/search.svg" alt="Search" />
-            <input
+            <input id="search"
               @input="onChangeSearchInput"
               class="border rounded-md py-2 pl-10 pr-4 outline-none focus:border-gray-400"
               type="text"
