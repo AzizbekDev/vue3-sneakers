@@ -19,14 +19,14 @@ const emit = defineEmits(['createOrder'])
 
     <DrawerHeader />
 
-    <CartListItem />
-
     <div v-if="!totalPrice" class="flex h-full items-center">
       <InfoBlock image-url="/package-icon.png" title="Корзина пустая"
         description="Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ." />
     </div>
 
     <div v-else>
+      <CartListItem />
+
       <div class="flex flex-col gap-4 mt-7">
 
         <div class="flex gap-2">
