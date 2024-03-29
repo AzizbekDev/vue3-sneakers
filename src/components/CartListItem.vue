@@ -2,7 +2,7 @@
 import { inject } from 'vue'
 import CartItem from './CartItem.vue'
 
-const { cart } = inject('cart') 
+const { cart, removeFromCart } = inject('cart') 
 </script>
 <template>
   <div class="flex flex-col gap-4">
@@ -12,6 +12,7 @@ const { cart } = inject('cart')
       :title="item.title" 
       :price="item.price" 
       :image-url="item.imageUrl"
+      @on-click-remove="() => removeFromCart(item)"
     />
   </div>
 </template>
