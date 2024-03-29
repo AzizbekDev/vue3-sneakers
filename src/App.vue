@@ -8,6 +8,8 @@ import Drawer from './components/Drawer.vue'
 
 const items = ref([])
 
+const cart = ref([])
+
 const drawerOpen = ref(false)
 
 const closeDrawer = () => {
@@ -29,6 +31,17 @@ const onChangeSelect = (event) => {
 
 const onChangeSearchInput = (event) => {
   filters.searchQuery = event.target.value
+}
+
+const addToCart = (item) => {
+  if(!item.isAdded){
+    item.isAdded = true
+    cart.value.push(item)
+  }else{
+    cart.value.splice(cart.value.indexOf(item), 1)
+    item.isAdded = false
+  }
+  console.log(cart.value)
 }
 
 const addToFavorite = async (item) => {
@@ -102,7 +115,8 @@ onMounted(async () => {
 
 watch(filters, fetchItems)
 
-provide('cardActions', {
+provide('cart', {
+  cart,
   closeDrawer,
   openDrawer
 })
@@ -134,7 +148,7 @@ provide('cardActions', {
           </div>
         </div>
       </div>
-      <CardList :items="items" @add-to-favorite="addToFavorite" />
+      <CardList :items="items" @add-to-favorite="addToFavorite" @add-to-cart="addToCart" />
     </div>
   </div>
 </template>
