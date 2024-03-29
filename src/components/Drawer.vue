@@ -4,8 +4,12 @@ import CartListItem from './CartListItem.vue'
 
 defineProps({
   totalPrice: Number,
-  vatPrice: Number
+  vatPrice: Number,
+  disabledButton: Boolean
 })
+
+const emit = defineEmits(['createOrder'])
+
 </script>
 <template>
   <div class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-70"></div>
@@ -24,9 +28,8 @@ defineProps({
         <div class="flex-1 border-b border-dashed"></div>
         <b>{{ vatPrice }} руб. </b>
       </div>
-      <button
-        class="bg-lime-500 w-full rounded-xl py-3 mt-4 text-white disabled:bg-slate-300 hover:bg-lime-600 active:bg-lime-700 cursor-pointer"
-      >
+      <button :disabled="disabledButton" @click="emit('createOrder')"
+        class="bg-lime-500 w-full rounded-xl py-3 mt-4 text-white disabled:bg-slate-300 hover:bg-lime-600 active:bg-lime-700 cursor-pointer">
         Оформить заказ
       </button>
     </div>
