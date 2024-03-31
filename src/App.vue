@@ -6,7 +6,6 @@ import Header from './components/Header.vue'
 
 import Drawer from './components/Drawer.vue'
 
-import Home from './pages/Home.vue'
 /* Cart */
 const cart = ref([])
 
@@ -75,7 +74,7 @@ provide('cart', {
   <div class="bg-white w-4/5 m-auto mt-14 rounded-xl shadow-xl">
     <Header :total-price="totalPrice" @open-drawer="openDrawer" />
     <div class="p-10">
-      <Home />
+      <RouterView />
     </div>
   </div>
 </template>
