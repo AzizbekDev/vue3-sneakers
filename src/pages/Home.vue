@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, reactive, watch, ref, inject } from 'vue'
+import debounse from 'lodash/debounce'
 import axios from 'axios'
 import CardList from '../components/CardList.vue'
 
@@ -16,9 +17,9 @@ const onChangeSelect = (event) => {
     filters.sortBy = event.target.value
 }
 
-const onChangeSearchInput = (event) => {
+const onChangeSearchInput = debounse((event) => {
     filters.searchQuery = event.target.value
-}
+}, 500)
 
 const onClickAddPlus = (item) => {
     if (!item.isAdded) {
