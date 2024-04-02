@@ -1,15 +1,41 @@
 <script setup>
+import axios from "axios";
+import { ref, computed, inject } from "vue";
+
 import DrawerHeader from './DrawerHeader.vue'
 import CartListItem from './CartListItem.vue'
 import InfoBlock from './InfoBlock.vue'
 
-defineProps({
+const props = defineProps({
   totalPrice: Number,
-  vatPrice: Number,
-  disabledButton: Boolean
+  vatPrice: Number
 })
 
-const emit = defineEmits(['createOrder'])
+const { cart } = inject('cart')
+const isCreating = ref(false)
+
+const createOrder = async () => {
+  try {
+    isCreating.value = true
+
+    const { data } = await axios.post('https://6e7baa9f3a425a05.mokky.dev/orders', {
+      items: cart.value,
+      totalPrice: props.totalPrice.value,
+    })
+
+    cart.value = []
+
+    return data
+  } catch (err) {
+    console.log(err)
+  } finally {
+    isCreating.value = false
+  }
+}
+
+const cartIsEmpty = computed(() => cart.value.length === 0)
+
+const disabledButton = computed(() => isCreating.value || cartIsEmpty.value)
 
 </script>
 <template>
@@ -41,12 +67,13 @@ const emit = defineEmits(['createOrder'])
           <b>{{ vatPrice }} руб. </b>
         </div>
 
-        <button :disabled="disabledButton" @click="emit('createOrder')"
+        <button :disabled="disabledButton" @click="createOrder"
           class="bg-lime-500 w-full rounded-xl py-3 mt-4 text-white disabled:bg-slate-300 hover:bg-lime-600 active:bg-lime-700 cursor-pointer">
           Оформить заказ
         </button>
 
       </div>
+
     </div>
 
   </div>
